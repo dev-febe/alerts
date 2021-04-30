@@ -3,22 +3,15 @@ package com.safetynet.alerts.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.service.FireStationService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
 
@@ -29,23 +22,14 @@ import static org.mockito.Mockito.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 
-@Rollback
 @RunWith(SpringRunner.class)
-@ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@WebMvcTest(FireStationController.class)
 public class FireStationControllerTest {
     @MockBean
     FireStationService service;
 
-    private MockMvc mockMvc;
-
     @Autowired
-    protected WebApplicationContext wac;
-
-    @Before  // This method will execute it before each method is executed.
-    public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();  // Initialize MockMVC object
-    }
+    private MockMvc mockMvc;
 
     @Test
     public void testGetFireStations() throws Exception {

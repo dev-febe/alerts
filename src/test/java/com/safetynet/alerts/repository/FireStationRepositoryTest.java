@@ -190,4 +190,51 @@ public class FireStationRepositoryTest {
 
         Mockito.verify(jsonToDtoHelper, Mockito.times(1)).getJson();
     }
+
+    @Test
+    public void deleteById_shouldReturnSuccess() throws IOException, ParseException {
+        mockGetJson();
+
+        FireStation fireStation = new FireStation("Abidjan", "3", new ArrayList<>());
+
+        List<Person> persons = new ArrayList<>() {{
+            add(new Person(
+                    "kone",
+                    "ben hassan",
+                    "Abidjan",
+                    "Abidjan",
+                    "",
+                    "+2250777059870",
+                    "",
+                    0,
+                    new HashMap<>()
+            ));
+        }};
+
+        List<FireStation> fireStations = new ArrayList<>() {{
+            add(new FireStation("Abidjan", "3", new ArrayList<>()));
+        }};
+
+        List<MedicalRecord> medicalRecords = new ArrayList<>() {{
+            add(new MedicalRecord(
+                    "kone",
+                    "ben hassan",
+                    new SimpleDateFormat("yyyy-mm-dd").parse("1990-03-03"),
+                    new ArrayList<String>() {{
+                        add("shellfish");
+                    }},
+                    new ArrayList<String>() {{
+                        add("shellfish");
+                    }}));
+        }};
+
+        Dto dto = new Dto(persons, fireStations, medicalRecords);
+        Mockito.when(jsonToDtoHelper
+                .saveJson(dto))
+                .thenReturn(true);
+
+        fireStationRepository.deleteById("Abidjan");
+
+        Mockito.verify(jsonToDtoHelper, Mockito.times(1)).getJson();
+    }
 }
