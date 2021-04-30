@@ -5,7 +5,6 @@ import com.safetynet.alerts.helper.JsonToDtoHelper;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -20,10 +19,14 @@ import java.util.stream.Stream;
 
 @Component
 public class PersonRepository implements JsonRepository<Person, Map<String, String>> {
+    JsonToDtoHelper jsonToDtoHelper;
+
+    PersonRepository(JsonToDtoHelper jsonToDtoHelper) {
+        this.jsonToDtoHelper = jsonToDtoHelper;
+    }
+
     @Override
     public List<Person> findAll() throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
-
         return jsonToDtoHelper
                 .getJson()
                 .getPersons();
@@ -32,8 +35,6 @@ public class PersonRepository implements JsonRepository<Person, Map<String, Stri
 
     @Override
     public Optional<Person> findById(Map<String, String> person) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
-
         List<Person> persons = jsonToDtoHelper
                 .getJson()
                 .getPersons();
@@ -45,20 +46,18 @@ public class PersonRepository implements JsonRepository<Person, Map<String, Stri
                 .findFirst();
     }
 
-    public Stream<Person> findByStation(String address) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
-
+    public List<Person> findByStation(String address) throws IOException {
         List<Person> persons = jsonToDtoHelper
                 .getJson()
                 .getPersons();
 
         return persons.stream()
-                .filter(_person -> _person.getAddress().equals(address));
+                .filter(_person -> _person.getAddress().equals(address))
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean save(Person person) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
         dto.getPersons().add(person);
         jsonToDtoHelper.saveJson(dto);
@@ -67,7 +66,6 @@ public class PersonRepository implements JsonRepository<Person, Map<String, Stri
 
     @Override
     public Person update(Map<String, String> person, Person personToUpdate) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
 
         dto.getPersons()
@@ -85,7 +83,6 @@ public class PersonRepository implements JsonRepository<Person, Map<String, Stri
 
     @Override
     public void deleteById(Map<String, String> person) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
 
         dto.getMedicalrecords()

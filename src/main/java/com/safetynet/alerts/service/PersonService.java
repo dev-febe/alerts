@@ -48,13 +48,13 @@ public class PersonService {
     public List<Person> findChildren(String address) throws IOException {
         List<MedicalRecord> medicalRecords = medicalRecordRepository.findAll();
 
-        Stream<Person> persons = personRepository
+        List<Person> persons = personRepository
                 .findAll()
                 .stream()
-                .filter(person -> person.getAddress().equals(address));
+                .filter(person -> person.getAddress().equals(address)).collect(Collectors.toList());
 
         return personRepository.filterPersonsByAge(
-                persons,
+                persons.stream(),
                 medicalRecords,
                 -18
         );

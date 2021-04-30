@@ -31,7 +31,7 @@ public class FireStationController {
         } catch (IOException e) {
             logger.error("Source file not found");
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Source file not found", e);
+                    HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
     }
 

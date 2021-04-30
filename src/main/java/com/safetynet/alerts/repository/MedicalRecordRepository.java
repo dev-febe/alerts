@@ -4,7 +4,6 @@ import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.helper.Dto;
 import com.safetynet.alerts.helper.JsonToDtoHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,10 +12,14 @@ import java.util.Optional;
 
 @Component
 public class MedicalRecordRepository implements JsonRepository<MedicalRecord, Map<String, String>> {
+    JsonToDtoHelper jsonToDtoHelper;
+
+    MedicalRecordRepository(JsonToDtoHelper jsonToDtoHelper) {
+        this.jsonToDtoHelper = jsonToDtoHelper;
+    }
+
     @Override
     public List<MedicalRecord> findAll() throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
-
         return jsonToDtoHelper
                 .getJson()
                 .getMedicalrecords();
@@ -24,8 +27,6 @@ public class MedicalRecordRepository implements JsonRepository<MedicalRecord, Ma
 
     @Override
     public Optional<MedicalRecord> findById(Map<String, String> person) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
-
         List<MedicalRecord> medicalRecords = jsonToDtoHelper
                 .getJson()
                 .getMedicalrecords();
@@ -39,7 +40,6 @@ public class MedicalRecordRepository implements JsonRepository<MedicalRecord, Ma
 
     @Override
     public boolean save(MedicalRecord medicalRecord) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
         dto.getMedicalrecords().add(medicalRecord);
         jsonToDtoHelper.saveJson(dto);
@@ -48,7 +48,6 @@ public class MedicalRecordRepository implements JsonRepository<MedicalRecord, Ma
 
     @Override
     public MedicalRecord update(Map<String, String > person, MedicalRecord medicalRecordToUpdate) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
 
         dto.getMedicalrecords()
@@ -67,7 +66,6 @@ public class MedicalRecordRepository implements JsonRepository<MedicalRecord, Ma
 
     @Override
     public void deleteById(Map<String, String> person) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
 
         dto.getMedicalrecords()

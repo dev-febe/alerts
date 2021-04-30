@@ -8,11 +8,9 @@ import lombok.*;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MedicalRecord {
     @JsonProperty("firstName")
@@ -23,8 +21,8 @@ public class MedicalRecord {
             (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @JsonProperty("birthdate")
     private Date birthdate;
-    @JsonProperty("birthdate")
+    @JsonProperty("medications")
     private List<String> medications;
-    @JsonProperty("birthdate")
+    @JsonProperty("allergies")
     private List<String> allergies;
 }

@@ -4,7 +4,6 @@ import com.safetynet.alerts.helper.Dto;
 import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.helper.JsonToDtoHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,10 +11,14 @@ import java.util.Optional;
 
 @Component
 public class FireStationRepository implements JsonRepository<FireStation, String> {
+    JsonToDtoHelper jsonToDtoHelper;
+
+    FireStationRepository(JsonToDtoHelper jsonToDtoHelper) {
+        this.jsonToDtoHelper = jsonToDtoHelper;
+    }
+
     @Override
     public List<FireStation> findAll() throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
-
         return jsonToDtoHelper
                 .getJson()
                 .getFirestations();
@@ -23,8 +26,6 @@ public class FireStationRepository implements JsonRepository<FireStation, String
 
     @Override
     public Optional<FireStation> findById(String address) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
-
         List<FireStation> firestations = jsonToDtoHelper
                 .getJson()
                 .getFirestations();
@@ -35,8 +36,6 @@ public class FireStationRepository implements JsonRepository<FireStation, String
     }
 
     public Optional<FireStation> findByStation(String station) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
-
         List<FireStation> firestations = jsonToDtoHelper
                 .getJson()
                 .getFirestations();
@@ -48,7 +47,6 @@ public class FireStationRepository implements JsonRepository<FireStation, String
 
     @Override
     public boolean save(FireStation fireStation) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
         dto.getFirestations().add(fireStation);
         jsonToDtoHelper.saveJson(dto);
@@ -57,7 +55,6 @@ public class FireStationRepository implements JsonRepository<FireStation, String
 
     @Override
     public FireStation update(String address, FireStation fireStationToUpdate) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
 
         dto.getFirestations()
@@ -75,7 +72,6 @@ public class FireStationRepository implements JsonRepository<FireStation, String
 
     @Override
     public void deleteById(String address) throws IOException {
-        JsonToDtoHelper jsonToDtoHelper = new JsonToDtoHelper();
         Dto dto = jsonToDtoHelper.getJson();
 
         dto.getFirestations()

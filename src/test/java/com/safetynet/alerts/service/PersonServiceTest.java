@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -18,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class PersonServiceTest {
     @Mock
     PersonRepository personRepository;
@@ -95,7 +98,6 @@ public class PersonServiceTest {
                 new HashMap<>()
         );
 
-
         MedicalRecord medicalRecordOver18 = new MedicalRecord(
                 "kone",
                 "ben fousseni",
@@ -118,9 +120,21 @@ public class PersonServiceTest {
             add(medicalRecordUnder18);
         }});
 
-        List<Person> persons = personService.findChildren("Abidjan");
+        List<Person> persons = new ArrayList<>() {{
+            add(personOver18);
+        }};
+        List<MedicalRecord> medicalRecords = new ArrayList<>() {{
+            add(medicalRecordOver18);
+        }};
 
-        Assert.assertEquals(persons.size(), 1);
+        Mockito.when(personRepository.filterPersonsByAge(persons.stream(), medicalRecords, -18)).thenReturn(new ArrayList<>() {{
+            add(personOver18);
+        }});
+
+        List<Person> children = personService.findChildren("Abidjan");
+
+
+        Assert.assertEquals(children.size(), 0);
     }
 
     @Test

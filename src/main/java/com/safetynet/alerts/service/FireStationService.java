@@ -10,13 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class FireStationService {
@@ -43,15 +40,14 @@ public class FireStationService {
         long adoCount = 0L;
 
         if (fireStation.isPresent()) {
+            persons = personRepository.findByStation(fireStation.get().getAddress());
+
             List<MedicalRecord> medicalRecords = medicalRecordRepository.findAll();
 
-            Stream<Person> _person = personRepository.findByStation(fireStation.get().getAddress());
+            adultCount = personRepository.filterPersonsByAge(persons.stream(), medicalRecords, 18).size();
 
-            adultCount = personRepository.filterPersonsByAge(_person, medicalRecords, 18).size();
+            adoCount = personRepository.filterPersonsByAge(persons.stream(), medicalRecords, -18).size();
 
-            adoCount = personRepository.filterPersonsByAge(_person, medicalRecords, -18).size();
-
-            persons = _person.collect(Collectors.toList());
         }
 
         HashMap<String, Object> personsByFirestation = new HashMap<>();

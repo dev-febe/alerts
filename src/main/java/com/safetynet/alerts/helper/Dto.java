@@ -8,11 +8,10 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Dto {
     private List<Person> persons;

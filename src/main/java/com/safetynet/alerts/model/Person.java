@@ -7,11 +7,9 @@ import lombok.*;
 import java.util.List;
 import java.util.Map;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Person {
     @JsonProperty("firstName")
